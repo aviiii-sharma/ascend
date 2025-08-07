@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Result</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .result-text {
+            font-size: 1.3rem;
+            color: #333;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .employee-header { margin-bottom: 20px; }
+
+        .employee-name {
+            font-size: 1.8rem;
+            color: #333;
+            margin: 10px 0;
+            font-weight: 600;
+        }
+
+        .score-display { margin: 25px 0; }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .score-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .readiness-level { margin: 20px 0; }
+
+        .level-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .level-highly-ready { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); }
+        .level-ready { background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%); }
+        .level-partially-ready { background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%); }
+        .level-not-ready { background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%); }
+
+        .level-very-low-risk { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); }
+        .level-low-risk { background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%); }
+        .level-moderate-risk { background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%); }
+        .level-high-risk { background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%); }
+
+        .recommendation {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .recommendation-text {
+            font-size: 1.1rem;
+            color: #555;
+            margin: 0;
+            font-style: italic;
+        }
+
+        .result-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-secondary {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 30px 20px; }
+            h2 { font-size: 1.5rem; }
+            .result-text { font-size: 1.1rem; }
+            .actions { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 250px; }
+        }
+    </style>
+</head>
+<!-- ... head content remains unchanged ... -->
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-chart-bar"></i>
+        </div>
+        <h2>Employee Evaluation Results</h2>
+
+        <!-- Promotion -->
+        {% if result_data.promotion %}
+        <h3 style="color: #444; margin-top: 30px;">📈 Promotion Prediction</h3>
+        <div class="result-card">
+            <div class="employee-header">
+                <div class="result-icon"><i class="fas fa-user-tie"></i></div>
+                <h3 class="employee-name">{{ result_data.promotion.employee_name }}</h3>
+            </div>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-number">{{ result_data.promotion.score }}%</span>
+                </div>
+            </div>
+
+            <div class="readiness-level">
+                <span class="level-badge level-{{ result_data.promotion.level.lower().replace(' ', '-') }}">
+                    {{ result_data.promotion.icon }} {{ result_data.promotion.level }}
+                </span>
+            </div>
+
+            <div class="recommendation">
+                <p class="recommendation-text">{{ result_data.promotion.recommendation }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Attrition -->
+        {% if result_data.attrition %}
+        <h3 style="color: #444; margin-top: 30px;">📉 Attrition Risk</h3>
+        <div class="result-card">
+            <div class="employee-header">
+                <div class="result-icon"><i class="fas fa-user-clock"></i></div>
+                <h3 class="employee-name">{{ result_data.attrition.employee_name }}</h3>
+            </div>
+
+            <div class="readiness-level">
+                <span class="level-badge level-{{ result_data.attrition.risk_level.lower().replace(' ', '-') }}">
+                    {{ result_data.attrition.icon }} {{ result_data.attrition.risk_level }}
+                </span>
+            </div>
+
+            <div class="recommendation">
+                <p class="recommendation-text">{{ result_data.attrition.recommendation }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Anomaly -->
+        {% if result_data.anomaly %}
+        <h3 style="color: #444; margin-top: 30px;">⚠️ Anomaly Detection</h3>
+        <div class="result-card">
+            <div class="employee-header">
+                <div class="result-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <h3 class="employee-name">System Flag</h3>
+            </div>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-number">{{ result_data.anomaly.anomaly_score }}</span>
+                </div>
+            </div>
+
+            <div class="readiness-level">
+                <span class="level-badge level-{{ result_data.anomaly.anomaly_status.lower().replace(' ', '-') }}">
+                    {{ result_data.anomaly.icon }} {{ result_data.anomaly.anomaly_status }}
+                </span>
+            </div>
+
+             
+            {% if result_data.anomaly.anomaly_status == "Anomaly Detected" %}
+            <div class="recommendation" style="margin-top: 10px; border-left: 4px solid #e83e8c;">
+                <p class="recommendation-text"><strong>Reason:</strong> {{ result_data.anomaly.description }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        <!-- Feedback Summary -->
+        {% if result_data.feedback_summary %}
+        <h3 style="color: #444; margin-top: 30px;">📝 Feedback Summary</h3>
+        <div class="result-card">
+            <div class="employee-header">
+                <div class="result-icon"><i class="fas fa-comment-dots"></i></div>
+                <h3 class="employee-name">Gemini AI Summary</h3>
+            </div>
+
+            <div class="recommendation" style="margin-top: 10px;">
+                <pre style="white-space: pre-wrap; font-size: 0.95em; line-height: 1.5; color: #333;">
+{{ result_data.feedback_summary }}
+                </pre>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="actions">
+            <a href="/search" class="btn">Search Another Employee</a>
+        </div>
+    </div>
+</body>

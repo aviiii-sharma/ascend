@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Performance Report - {{ promotion.employee_name }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1in;
+        }
+
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            font-size: 10pt;
+            color: #333333;
+            line-height: 1.4;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header-main h1 {
+            font-size: 26pt;
+            margin: 0;
+            color: #003d7a;
+        }
+
+        .header-main p {
+            font-size: 12pt;
+            margin: 5px 0 0 0;
+            color: #555555;
+        }
+        
+        .header-details {
+            text-align: right;
+            font-size: 9pt;
+            color: #444444;
+        }
+
+        .header-details p {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .section-title {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #003d7a;
+            border-bottom: 1px solid #cccccc;
+            padding-bottom: 6px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .summary-card p {
+            margin: 0 0 8px 0;
+        }
+
+        .summary-card strong {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .summary-card em {
+            font-style: italic;
+            color: #555;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .anomaly-section {
+            margin-top: 15px;
+        }
+        
+        .kpi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .kpi-table th, .kpi-table td {
+            padding: 8px 0;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .kpi-table th {
+            font-weight: bold;
+            color: #333;
+            width: 70%;
+        }
+
+        .kpi-table td {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .feedback-section p {
+            margin: 0 0 10px 0;
+        }
+        
+        .feedback-section strong {
+           display: inline-block;
+           width: 120px; /* Aligns the values */
+        }
+        
+        footer {
+            position: fixed;
+            bottom: -60px; /* Position below the page */
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 8pt;
+            color: #999999;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-main">
+            <h1>{{ promotion.employee_name }}</h1>
+            <p>{{ promotion.department }} / {{ promotion.role }}</p>
+        </div>
+        <div class="header-details">
+            <p><strong>Employee ID:</strong> {{ promotion.employee_id }}</p>
+            <p><strong>Report Date:</strong> {{ generation_date }}</p>
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <h2 class="section-title">Performance Overview</h2>
+            <div class="grid-container">
+                <div class="summary-card">
+                    <p><strong>Promotion Readiness:</strong> {{ promotion.level }} (Score: {{ promotion.score }})</p>
+                    <em>{{ promotion.recommendation }}</em>
+                </div>
+                <div class="summary-card">
+                    <p><strong>Attrition Risk:</strong> {{ attrition.risk_level }}</p>
+                    <em>{{ attrition.recommendation }}</em>
+                </div>
+            </div>
+            <div class="summary-card anomaly-section">
+                <p><strong>Anomaly Status:</strong> {{ anomaly.anomaly_status }}
+                {% if anomaly.anomaly_status != "Normal" %}
+                    - Reason: {{ anomaly.description }}
+                {% endif %}
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Key Performance Indicators (KPIs)</h2>
+            <table class="kpi-table">
+                <tbody>
+                    {% for key, value in promotion.kpi_scores.items() %}
+                        <tr>
+                            <th>{{ key.replace('_', ' ')|title }} Score</th>
+                            <td>{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2 class="section-title">AI-Powered Feedback Summary</h2>
+            <div class="feedback-section">
+                <p><strong>Sentiment:</strong> {{ parsed_feedback.sentiment or 'N/A' }}</p>
+                <p><strong>Key Themes:</strong> {{ parsed_feedback.key_themes or 'N/A' }}</p>
+                <p><strong>One-Line Summary:</strong> {{ parsed_feedback.one_line_summary or 'N/A' }}</p>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
