@@ -693,7 +693,8 @@ promotion_features = joblib.load(PROMOTION_FEATURES_PATH)
 attrition_model = joblib.load(ATTRITION_MODEL_PATH)
 attrition_features = joblib.load(ATTRITION_FEATURES_PATH)
 label_encoder = joblib.load(LABEL_ENCODER_PATH)
-
+import sys
+sys.modules['__main__'].AnomalyDetectorWithReason = AnomalyDetectorWithReason
 anomaly_model = joblib.load(ANOMALY_MODEL_PATH)
 anomaly_features = anomaly_model.features
 
