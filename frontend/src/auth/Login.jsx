@@ -20,7 +20,11 @@ function Login() {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      // 1. Get the API URL from the environment variable
+      const apiUrl = import.meta.env.VITE_API_URL; 
+      
+      // 2. Use the apiUrl variable to build the full request URL
+      const res = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,7 +42,8 @@ function Login() {
 
     } catch (err) {
       console.error('Login request failed', err);
-      setError(err.message);
+      // Display a more user-friendly message for network errors
+      setError(err.message || 'Failed to connect to the server. Please try again.');
     }
   };
 
